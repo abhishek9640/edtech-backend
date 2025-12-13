@@ -1,0 +1,824 @@
+{
+  "info": {
+    "name": "EdTech Platform API",
+    "description": "Complete API collection for EdTech Learning Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12345"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "courseId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "lessonId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User (Student)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('accessToken', response.data.accessToken);",
+                  "    pm.collectionVariables.set('userId', response.data.user.id);",
+                  "    pm.environment.set('accessToken', response.data.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"user\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Register a new user as a student"
+          },
+          "response": []
+        },
+        {
+          "name": "Register Instructor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('accessToken', response.data.accessToken);",
+                  "    pm.collectionVariables.set('userId', response.data.user.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Smith\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"instructor\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Register a new instructor"
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('accessToken', response.data.accessToken);",
+                  "    pm.collectionVariables.set('userId', response.data.user.id);",
+                  "    pm.environment.set('accessToken', response.data.accessToken);",
+                  "    console.log('Access Token:', response.data.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login with email and password"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            },
+            "description": "Get current authenticated user details"
+          },
+          "response": []
+        }
+      ],
+      "description": "Authentication endpoints for user registration and login"
+    },
+    {
+      "name": "Courses",
+      "item": [
+        {
+          "name": "Get All Courses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/courses?category=Web Development&level=beginner&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Web Development",
+                  "description": "Filter by category",
+                  "disabled": true
+                },
+                {
+                  "key": "level",
+                  "value": "beginner",
+                  "description": "Filter by level",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "javascript",
+                  "description": "Search courses",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get all published courses with optional filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/courses/{{courseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "{{courseId}}"]
+            },
+            "description": "Get detailed information about a specific course"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Course",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('courseId', response.data.course._id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Complete Web Development Bootcamp\",\n  \"description\": \"Learn web development from scratch with HTML, CSS, JavaScript, React, Node.js and more. Build real-world projects and become a full-stack developer.\",\n  \"category\": \"Web Development\",\n  \"price\": 49.99,\n  \"duration\": 40,\n  \"level\": \"beginner\",\n  \"thumbnail\": \"https://images.unsplash.com/photo-1498050108023-c5249f4df085\",\n  \"tags\": [\"html\", \"css\", \"javascript\", \"react\", \"nodejs\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/courses",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses"]
+            },
+            "description": "Create a new course (Instructor/Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Course",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Complete Web Development Bootcamp 2025\",\n  \"description\": \"Updated description with new content\",\n  \"price\": 59.99\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/courses/{{courseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "{{courseId}}"]
+            },
+            "description": "Update course details (Instructor/Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Course",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/courses/{{courseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "{{courseId}}"]
+            },
+            "description": "Delete a course (Instructor/Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Instructor Courses",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/courses/instructor/my-courses",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "instructor", "my-courses"]
+            },
+            "description": "Get all courses created by the logged-in instructor"
+          },
+          "response": []
+        },
+        {
+          "name": "Publish/Unpublish Course",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/courses/{{courseId}}/publish",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "{{courseId}}", "publish"]
+            },
+            "description": "Toggle course publish status"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Course Review",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Excellent course! I learned so much and the instructor explains everything clearly.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/courses/{{courseId}}/reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["courses", "{{courseId}}", "reviews"]
+            },
+            "description": "Add a review to a course (must be enrolled)"
+          },
+          "response": []
+        }
+      ],
+      "description": "Course management endpoints"
+    },
+    {
+      "name": "Enrollments",
+      "item": [
+        {
+          "name": "Enroll in Course",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/enrollments/{{courseId}}/enroll",
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "{{courseId}}", "enroll"]
+            },
+            "description": "Enroll in a course"
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Enrollments",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/enrollments/my-enrollments",
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "my-enrollments"]
+            },
+            "description": "Get all enrollments for the logged-in user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Enrollment Details",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/enrollments/{{courseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "{{courseId}}"]
+            },
+            "description": "Get enrollment details for a specific course"
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Lesson Complete",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/enrollments/{{courseId}}/lessons/{{lessonId}}/complete",
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "{{courseId}}", "lessons", "{{lessonId}}", "complete"]
+            },
+            "description": "Mark a lesson as completed and update progress"
+          },
+          "response": []
+        },
+        {
+          "name": "Unenroll from Course",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/enrollments/{{courseId}}/unenroll",
+              "host": ["{{baseUrl}}"],
+              "path": ["enrollments", "{{courseId}}", "unenroll"]
+            },
+            "description": "Unenroll from a course"
+          },
+          "response": []
+        }
+      ],
+      "description": "Course enrollment and progress tracking endpoints"
+    },
+    {
+      "name": "Lessons",
+      "item": [
+        {
+          "name": "Get Course Lessons",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/lessons/courses/{{courseId}}/lessons",
+              "host": ["{{baseUrl}}"],
+              "path": ["lessons", "courses", "{{courseId}}", "lessons"]
+            },
+            "description": "Get all lessons for a specific course"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Lesson by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/lessons/{{lessonId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["lessons", "{{lessonId}}"]
+            },
+            "description": "Get details of a specific lesson"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Lesson",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('lessonId', response.data.lesson._id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Introduction to HTML\",\n  \"content\": \"In this lesson, you will learn the basics of HTML including tags, elements, and document structure.\",\n  \"duration\": 15,\n  \"order\": 1,\n  \"videoUrl\": \"https://example.com/video1.mp4\",\n  \"resources\": [\n    {\n      \"title\": \"HTML Cheat Sheet\",\n      \"url\": \"https://example.com/html-cheatsheet.pdf\",\n      \"type\": \"pdf\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lessons/courses/{{courseId}}/lessons",
+              "host": ["{{baseUrl}}"],
+              "path": ["lessons", "courses", "{{courseId}}", "lessons"]
+            },
+            "description": "Create a new lesson for a course (Instructor/Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Lesson",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Introduction to HTML - Updated\",\n  \"content\": \"Updated lesson content\",\n  \"duration\": 20\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lessons/{{lessonId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["lessons", "{{lessonId}}"]
+            },
+            "description": "Update lesson details (Instructor/Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Lesson",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/lessons/{{lessonId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["lessons", "{{lessonId}}"]
+            },
+            "description": "Delete a lesson (Instructor/Admin only)"
+          },
+          "response": []
+        }
+      ],
+      "description": "Lesson management endpoints"
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            },
+            "description": "Get public profile of a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe Updated\",\n  \"bio\": \"Full-stack developer passionate about learning new technologies\",\n  \"avatar\": \"https://example.com/avatar.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "profile"]
+            },
+            "description": "Update current user's profile"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users (Admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            },
+            "description": "Get all users (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User (Admin)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            },
+            "description": "Delete a user (Admin only)"
+          },
+          "response": []
+        }
+      ],
+      "description": "User management endpoints"
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["health"]
+        },
+        "description": "Check if the server is running"
+      },
+      "response": []
+    }
+  ]
+}
